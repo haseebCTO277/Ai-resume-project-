@@ -1,0 +1,475 @@
+.resume-main {
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+  margin: auto;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 19px;
+}
+
+@media (max-width: 798px) {
+  .resume-main {
+    transform: scale(0.5);
+    transform-origin: top center;
+  }
+}
+
+.generating {
+  border: 2px solid green;
+}
+
+.download-pdf-button {
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+  margin: 1rem;
+  background-color: #1e40af; /* blue-600 */
+  color: white;
+}
+
+.full-name-input {
+  font-size: 2.25rem; /* text-4xl */
+  font-weight: 500; /* font-medium */
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 70%;
+}
+
+.professional-title-input {
+  font-size: 1.5rem; /* text-2xl */
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 0.5rem;
+}
+
+.social-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem; /* text-13px */
+  justify-content: center;
+  font-weight: 500; 
+  margin-left: 10px;
+}
+
+.auto-expand {
+  width: auto;
+  min-width: 50px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: width 0.3s ease;
+}
+
+.social-info-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.social-info-item svg {
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .social-info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .social-info-item input {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}
+
+
+
+.summary-title {
+  font-weight: 700; /* font-bold */
+  border-bottom: 2px solid rgb(160, 159, 159); /* border-b-2 border-b-black */
+}
+
+.summary-textarea {
+  font-size: 0.8125rem; /* text-13px */
+  border-bottom: 2px solid rgb(212, 211, 211); /* border-b-2 */
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+}
+
+.regenerate-button {
+  display: none;
+  group-hover: block;
+  position: absolute;
+  top: 15px;
+  right: 5px;
+  background-color: white;
+  border: 1px solid blue;
+  color: blue;
+  padding: 2px 10px;
+  border-radius: 5px;
+}
+
+.regenerate-options {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  border: 1px solid blue;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.generate-button,
+.close-button {
+  background-color: blue;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.close-button {
+  background-color: gray;
+}
+
+.experience-section {
+  margin-top: 20px;
+  position: relative;
+}
+
+.experience-title {
+  font-weight: 700; /* font-bold */
+  border-bottom: 2px solid rgb(160, 159, 159); /* border-b-2 border-b-black */
+}
+
+.experience-item {
+  position: relative;
+  transition: all 0.3s;
+}
+
+.experience-hover {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.experience-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700; /* font-bold */
+  font-size: 0.8125rem; /* text-13px */
+  flex-wrap: wrap; /* Ensure content wraps */
+}
+
+.experience-hover-content {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.experience-position,
+.experience-company,
+.experience-location,
+.experience-duration {
+  font-weight: 700; /* font-bold */
+}
+
+.experience-responsibilities,
+.extra-detailed-list {
+  margin-left: 10px;
+  list-style-type: disc;
+  font-size: 0.8125rem; /* text-13px */
+  line-height: 0.3rem; /* 17px */
+  margin-top: 0px; /* Reduced space between bullet points */
+  padding-left: 0; /* Ensure no padding is added */
+  position: relative;
+}
+
+.responsibility-item,
+.extra-detailed-list-item {
+  position: relative;
+  margin-bottom: 1px; 
+}
+
+.extra-detailed-textarea,
+.responsibility-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  margin-bottom: 0.1px; /* Reduced space between bullet points */
+}
+
+.add-responsibility-button,
+.add-experience-button,
+.add-education-button,
+.add-skill-button,
+.add-hobby-button,
+.add-software-button,
+.add-language-button,
+.add-certificate-button,
+.add-extra-section-button,
+.add-extra-detailed-section-button {
+  display: none;
+  margin: 20px auto;
+  background-color: green;
+  color: white;
+  font-weight: 700; /* font-bold */
+  padding: 10px 20px;
+  border-radius: 5px;
+  width: 50%;
+}
+
+.remove-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: red;
+}
+
+.regenerate-field-button,
+.more-options-button {
+  position: absolute;
+  top: -25px;
+  background-color: white;
+  border: 1px solid blue;
+  color: blue;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.more-options-button {
+  left: 5px;
+  border-color: green;
+  color: green;
+}
+
+.more-options {
+  position: absolute;
+  top: 10px;
+  background-color: white;
+  border: 1px solid green;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.save-button {
+  background-color: green;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.experience-item-content input,
+.experience-item-content p {
+  margin-right: 5px;
+}
+
+.education-section {
+  margin-top: 0px;
+  position: relative;
+}
+
+.education-title {
+  font-weight: 700; /* font-bold */
+  border-bottom: 2px solid rgb(160, 159, 159); /* border-b-2 border-b-black */
+}
+
+.education-list {
+  max-width: 99%;
+  font-size: 0.8125rem; /* text-13px */
+}
+
+.education-item {
+  position: relative;
+  margin-bottom: 10px; /* Small space between each additional education */
+}
+
+.education-item-content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px; /* Space between university and graduation year */
+}
+
+.education-institution {
+  font-weight: 700; /* font-bold */
+  width: 90%; /* Increase width of university */
+}
+
+.education-year {
+  margin-left: 20px; /* Add space to the left of year */
+}
+
+.education-degree {
+  font-style: italic; /* Degree in italic */
+  margin-left: 10px; /* Add space to the left of degree */
+  width: 90%; /* Increase width of degree */
+}
+
+.skills-section,
+.hobbies-section,
+.software-section,
+.languages-section,
+.certificates-section,
+.extra-section,
+.extra-detailed-section {
+  margin-top: 20px;
+  position: relative;
+}
+
+.skills-title,
+.hobbies-title,
+.software-title,
+.languages-title,
+.certificates-title,
+.extra-section-title,
+.extra-detailed-section-title {
+  font-weight: 700; /* font-bold */
+  border-bottom: 2px solid rgb(160, 159, 159); /* border-b-2 border-b-black */
+}
+
+.skills-list,
+.hobbies-list,
+.software-list,
+.languages-list,
+.extra-section-list,
+.extra-section-input,
+.extra-detailed-section-detail-textarea,
+.extra-detailed-section-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.8125rem; /* text-13px */
+  margin-top: 10px;
+}
+
+.skill-item,
+.hobby-item,
+.software-item,
+.language-item,
+.extra-item,
+.extra-detailed-item {
+  position: relative;
+}
+
+.skill-input,
+.hobby-input,
+.software-input,
+.language-input,
+.extra-input,
+.extra-detailed-input {
+  padding: 5px 10px;
+  border: 1px solid;
+  border-radius: 50px;
+  background: transparent;
+  outline: none;
+}
+
+.extra-detailed-list {
+  margin-left: 40px;
+  list-style-type: disc;
+  font-size: 0.8125rem; /* text-13px */
+  line-height: 1.3rem; /* 17px */
+  margin-top: 10px;
+  position: relative;
+}
+
+.extra-detailed-list-item {
+  position: relative;
+}
+
+.extra-detailed-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+}
+
+.add-extra-detailed-button {
+  display: inline-block;
+  color: green;
+}
+
+.certificates-section {
+  margin-top: 5px;
+  position: relative;
+}
+
+.certificates-title {
+  font-weight: 700; /* font-bold */
+  border-bottom: 2px solid rgb(160, 159, 159); /* border-b-2 border-b-black */
+}
+
+.certificates-list {
+  max-width: 90%;
+  font-size: 0.8125rem; 
+}
+
+.certificate-item {
+  position: relative;
+  margin-bottom: 10px; /* Small space between each additional certificate */
+}
+
+.certificate-item-content {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px; 
+}
+
+.certificate-name {
+  font-weight: 500; /* font-bold */
+  width: 90%; 
+}
+
+.certificate-year {
+  margin-left: 10px; /* Add space to the left of year */
+}
+
+.extra-detailed-sections {
+  width: 90%;
+}
+
+.extra-detailed-section-input {
+  width: 100%;
+  font-weight: 700; /* font-bold */
+}
+
+.extra-detailed-section-detail-textarea {
+  width: 100%;
+}
+
+.extra-sections {
+  width: 90%;
+}
+
+.extra-section-input {
+  width: 100%;
+  font-weight: 200; /* font-bold */
+}
+
+.experience-responsibilities li,
+.extra-detailed-list li {
+  margin-bottom: 0px; /* Ensure no margin between list items */
+}
+
+textarea {
+  margin-bottom: 0px; /* Ensure no margin between text areas */
+  line-height: 1rem; /* Adjust line height to reduce space */
+}
