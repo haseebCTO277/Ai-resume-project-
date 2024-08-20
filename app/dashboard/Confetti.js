@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
-
+ 
 const Confetti = ({ onComplete }) => {
   const canvasRef = useRef(null);
 
