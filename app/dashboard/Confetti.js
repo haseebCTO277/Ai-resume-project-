@@ -8,7 +8,7 @@ const Confetti = ({ onComplete }) => {
     const canvas = canvasRef.current;
     const myConfetti = confetti.create(canvas, {
       resize: true,
-      useWorker: true,
+      useWorker: true, 
     });
 
     const duration = 4 * 1000;
