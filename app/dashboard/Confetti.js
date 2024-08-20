@@ -10,7 +10,7 @@ const Confetti = ({ onComplete }) => {
       resize: true,
       useWorker: true, 
     });
-
+ 
     const duration = 4 * 1000;
     const end = Date.now() + duration;
 
