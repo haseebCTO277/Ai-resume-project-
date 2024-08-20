@@ -2,9 +2,6 @@
 /components.zip
 components.zip
 /.components.zip
-components
-/.components
-/components
 # dependencies
 /node_modules
 /.pnp
