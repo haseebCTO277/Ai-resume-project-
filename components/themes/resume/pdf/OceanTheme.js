@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import React from "react";
 import LinkContent from "./LinkContent";
-import { displayedresumeThemesTranslations } from "../../../../locales/displayedresumeThemesTranslations";
+import { displayedresumeThemesTranslations } from '../../../../locales/displayedresumeThemesTranslations';
 
 const PersonalInfo = ({ label, value, fullNameColor, t }) => {
   return (
@@ -40,18 +40,6 @@ const PersonalInfo = ({ label, value, fullNameColor, t }) => {
     </View>
   );
 };
-function arabicAlign(text) {
-  let array = text.split(" ");
-  array.shift();
-  let lastElement = array[array.length - 1].split("");
-  if (lastElement[lastElement.length - 1] === ".") {
-    lastElement.pop();
-  }
-  array.pop();
-  let newArray = [array, lastElement.join("")].flat();
-
-  return newArray.join(" ");
-}
 
 const SectionTitle = ({ label, fullNameColor, darkenedColor }) => {
   return (
@@ -110,11 +98,9 @@ export const OceanThemePdf = ({
   sectionsVisibility,
   fullNameColor,
   styles,
-  language,
+  language
 }) => {
-  const t =
-    displayedresumeThemesTranslations[language] ||
-    displayedresumeThemesTranslations.en;
+  const t = displayedresumeThemesTranslations[language] || displayedresumeThemesTranslations.en;
   const darkenedColor = darkenColor(fullNameColor, -1);
 
   return (
@@ -410,22 +396,16 @@ export const OceanThemePdf = ({
                       {experience.duration || ""}
                     </Text>
                   </View>
+
                   <View>
                     {(experience.responsibilities || []).map(
                       (responsibility, resIndex) => (
-                        <View
-                          key={resIndex}
-                          style={{
-                            paddingLeft: "12px",
-                            position: "relative",
-                          }}
-                        >
+                        <View key={resIndex} style={{ paddingLeft: "12px" }}>
                           <Text
                             style={{
                               ...styles.oceanText,
                               color: "#fff",
                               marginBottom: "2px",
-                              marginRight: "13px",
                             }}
                           >
                             {responsibility || ""}
@@ -545,7 +525,7 @@ export const OceanThemePdf = ({
             {/* EXTRA DETAILED SECTIONS */}
             {sectionsVisibility.extraDetailedSection && (
               <>
-                <Text
+<Text
                   style={{
                     ...styles.oceanTitle,
                     marginBottom: "5px",

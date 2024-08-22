@@ -1,4 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+<<<<<<< HEAD
 /components.zip
 components.zip
 /.components.zip
@@ -10,6 +11,14 @@ components
 /.pnp
 .pnp.js
 
+=======
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+>>>>>>> ae388809378862f9be26f9df4cc6a068343e69b2
 # testing
 /coverage
 
