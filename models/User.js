@@ -12,6 +12,10 @@ const userSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    familyName: {  // Add this line
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       trim: true,

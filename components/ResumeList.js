@@ -136,7 +136,20 @@ const DeleteButton = styled.button`
     transform: scale(1.1);
   }
 `;
-
+const ClickableDocumentTitle = styled(DocumentTitle)`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+const ColorIcon = styled.span`
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+`;
 
 export default function ResumeList({ resumes, coverLetters, onDelete }) {
   const [documents, setDocuments] = useState([]);
@@ -203,6 +216,7 @@ export default function ResumeList({ resumes, coverLetters, onDelete }) {
 
   const resumeCount = documents.filter((doc) => doc.type === "Resume").length;
   const coverLetterCount = documents.filter((doc) => doc.type === "Cover Letter").length;
+  const getEditLink = (document) => `/dashboard/${document.type.toLowerCase().replace(" ", "-")}/${document._id}`;
 
   return (
     <ListContainer>
@@ -249,20 +263,23 @@ export default function ResumeList({ resumes, coverLetters, onDelete }) {
             >
               {document.type}
             </DocumentType>
-            <DocumentTitle
-              style={{
-                color: document.type === "Resume" ? "#14b8a6" : "#f97316"
-              }}
-            >
-              {document.title || `${t.untitled || "Untitled"} ${document.type}`}
-            </DocumentTitle>
-            {document.type === "Resume" && <DocumentInfo>{t.color || "Color"}: {document.color}</DocumentInfo>}
-            {document.type === "Resume" && <DocumentInfo>{t.age || "Age"}: {document.age}</DocumentInfo>}
+            <Link href={getEditLink(document)} passHref>
+              <ClickableDocumentTitle
+                style={{
+                  color: document.type === "Resume" ? "#14b8a6" : "#f97316"
+                }}
+              >
+                {document.title || `${t.untitled || "Untitled"} ${document.type}`}
+              </ClickableDocumentTitle>
+            </Link>
+{document.type === "Resume" && (
+  <DocumentInfo>
+    <ColorIcon style={{ backgroundColor: document.resumeColor }} />
+    {t.color || "Font"}
+  </DocumentInfo>
+)}            {/* {document.type === "Resume" && <DocumentInfo>{t.age || "Age"}: {document.age}</DocumentInfo>} */}
             <DocumentInfo>{t.createdAt || "Created At"}: {new Date(document.createdAt).toLocaleDateString(language)}</DocumentInfo>
-            <Link
-              href={`/dashboard/${document.type.toLowerCase().replace(" ", "-")}/${document._id}`}
-              passHref
-            >
+            <Link href={getEditLink(document)} passHref>
               <EditLink>{t.edit || "Edit"} {document.type}</EditLink>
             </Link>
             {hoveredDocument === document._id && (

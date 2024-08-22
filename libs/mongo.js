@@ -1,3 +1,5 @@
+//Users/mohsinal/airesume-5/libs/mongo.js
+
 import { MongoClient } from "mongodb";
 
 // This lib is use just to connect to the database in next-auth.
