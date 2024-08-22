@@ -16,6 +16,7 @@ const ButtonLead = ({ extraStyle }) => {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
+
     setIsLoading(true);
     try {
       await apiClient.post("/lead", { email });
@@ -44,7 +45,7 @@ const ButtonLead = ({ extraStyle }) => {
         ref={inputRef}
         autoComplete="email"
         placeholder="tom@cruise.com"
-        className="w-full input input-bordered placeholder:opacity-60"
+        className="input input-bordered w-full placeholder:opacity-60"
         onChange={(e) => setEmail(e.target.value)}
       />
 
