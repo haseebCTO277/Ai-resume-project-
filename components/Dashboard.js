@@ -219,7 +219,7 @@ const EditableExperienceField = ({ experiences, onSave, fieldName }) => {
             />
             <div>
               <h4 className="font-bold mb-2">Responsibilities:</h4>
-              {exp.responsibilities.map((resp, respIndex) => (
+              {exp?.responsibilities?.map((resp, respIndex) => (
                 <div key={respIndex} className="mb-2 flex items-center">
                   <input
                     type="text"

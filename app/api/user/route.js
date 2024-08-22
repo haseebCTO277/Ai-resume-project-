@@ -1,5 +1,3 @@
-//Users/mohsinal/airesume-5/app/api/user/route.js
-
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/libs/next-auth";

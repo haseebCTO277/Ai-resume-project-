@@ -31,7 +31,7 @@ export const dashboardTranslations = {
       signOut: "Sign Out"
     },
     resumeCard: {
-      color: "Theme Color",
+      color: "Color",
       age: "Age",
       createdAt: "Created At",
       editResume: "Edit Resume"
@@ -43,7 +43,7 @@ export const dashboardTranslations = {
       searchPlaceholder: "Search by title",
       all: "All",
       untitled: "Untitled",
-      color: "Theme Color",
+      color: "Color",
       age: "Age",
       createdAt: "Created At",
       edit: "Edit",

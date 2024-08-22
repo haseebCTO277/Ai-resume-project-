@@ -1,4 +1,3 @@
-// File: components/Hero.js
 "use client";
 
 import React from 'react';
@@ -6,6 +5,25 @@ import Image from "next/image";
 import ButtonSignin from "./ButtonSignin";
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../locales/translations';
+import styled, { keyframes } from 'styled-components';
+
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+  }
+`;
+
+const PulsingButtonWrapper = styled.div`
+  display: inline-block;
+  width: 90%;
+  animation: ${pulse} 2s infinite;
+`;
 
 const Hero = () => {
   const { language } = useLanguage();
@@ -29,16 +47,28 @@ const Hero = () => {
             </p>
             
             <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-9">
-              <div className="pulse-container" style={{ width: '90%' }}>
+              <PulsingButtonWrapper>
                 <ButtonSignin
                   extraStyle="inline-flex items-center justify-center w-full px-8 py-1 text-lg font-bold text-white transition-all duration-200 bg-gray-900 border-2 border-transparent sm:w-auto rounded-xl font-pj hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 overflow-hidden text-overflow-ellipsis whitespace-nowrap"
                   buttonText={t.buttonText}
-                  style={{ 
-                    width: '100%', 
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                  style={{
+                    width: '100%',
+                    padding: '8px 32px',
+                    fontSize: '1.25rem',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    backgroundColor: '#333',
+                    border: '2px solid transparent',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
                   }}
                 />
-              </div>
+              </PulsingButtonWrapper>
             </div>
             
             <p className="mt-8 text-base text-gray-500 font-inter">{t.noCreditCard}</p>
@@ -63,24 +93,6 @@ const Hero = () => {
           </div>
         </div>
       </section>
-      <style jsx>{`
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-          }
-          70% {
-            box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-          }
-        }
-        .pulse-container {
-          display: inline-block;
-          animation: pulse 2s infinite;
-          border-radius: 0.75rem; /* This matches the rounded-xl class */
-        }
-      `}</style>
     </div>
   );
 };

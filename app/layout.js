@@ -1,4 +1,5 @@
 // File: app/layout.js
+import Head from "next/head";
 
 import { Inter } from "next/font/google";
 import PlausibleProvider from "next-plausible";
@@ -7,7 +8,7 @@ import ClientLayout from "@/components/LayoutClient";
 import Navbar from "@/components/Navbar";
 import config from "@/config";
 import "./globals.css";
-import { LanguageProvider } from '../contexts/LanguageContext'; // Add this import
+import { LanguageProvider } from "../contexts/LanguageContext"; // Add this import
 
 const font = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme={config.colors.theme} className={font.className}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin="true"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
         {config.domainName && <PlausibleProvider domain={config.domainName} />}
         <script
           defer

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import React from "react";
 import LinkContent from "./LinkContent";
-import { displayedresumeThemesTranslations } from '../../../../locales/displayedresumeThemesTranslations';
+import { displayedresumeThemesTranslations } from "../../../../locales/displayedresumeThemesTranslations";
 
 const PersonalInfo = ({ label, value, t }) => {
   return (
@@ -18,7 +18,11 @@ const PersonalInfo = ({ label, value, t }) => {
         {t[label]}
       </Text>
       {label === "linkedin" ? (
-        <LinkContent displayLabel={value || ""} value={value || ""} color={"#fff"} />
+        <LinkContent
+          displayLabel={value || ""}
+          value={value || ""}
+          color={"#fff"}
+        />
       ) : (
         <Text
           style={{
@@ -91,9 +95,11 @@ export const WhiteAndBluePdf = ({
   sectionsVisibility,
   fullNameColor,
   styles,
-  language
+  language,
 }) => {
-  const t = displayedresumeThemesTranslations[language] || displayedresumeThemesTranslations.en;
+  const t =
+    displayedresumeThemesTranslations[language] ||
+    displayedresumeThemesTranslations.en;
   const darkenedColor = darkenColor(fullNameColor, -40);
 
   return (
@@ -186,11 +192,18 @@ export const WhiteAndBluePdf = ({
                 <View>
                   {(experience.responsibilities || []).map(
                     (responsibility, resIndex) => (
-                      <View key={resIndex} style={{ paddingLeft: "10px" }}>
+                      <View
+                        key={resIndex}
+                        style={{
+                          paddingLeft: "10px",
+                          position: "relative",
+                        }}
+                      >
                         <Text
                           style={{
                             ...styles.blueAndWhiteText,
                             color: "#000",
+                            marginRight: "13px",
                             marginBottom: "2px",
                           }}
                         >
@@ -420,10 +433,18 @@ export const WhiteAndBluePdf = ({
         {/* Personal Info */}
         <SectionTitle label={t.personalInfo} darkenedColor={darkenedColor} />
         <View style={{ paddingLeft: "10px", paddingRight: "15px" }}>
-          <PersonalInfo value={resumeData.location || ""} label="location" t={t} />
+          <PersonalInfo
+            value={resumeData.location || ""}
+            label="location"
+            t={t}
+          />
           <PersonalInfo value={resumeData.phone || ""} label="phone" t={t} />
           <PersonalInfo value={resumeData.email || ""} label="email" t={t} />
-          <PersonalInfo value={resumeData.linkedin || ""} label="linkedin" t={t} />
+          <PersonalInfo
+            value={resumeData.linkedin || ""}
+            label="linkedin"
+            t={t}
+          />
         </View>
         {/* SKILLS */}
         <SectionTitle label={t.skills} darkenedColor={darkenedColor} />
@@ -513,26 +534,29 @@ export const WhiteAndBluePdf = ({
         {/* Extra Sections */}
         {sectionsVisibility.extraSection && (
           <>
-            <SectionTitle label={t.extraSections} darkenedColor={darkenedColor} />
+            <SectionTitle
+              label={t.extraSections}
+              darkenedColor={darkenedColor}
+            />
             <View style={{ paddingLeft: "10px", paddingRight: "15px" }}>
               {(resumeData.extraSection || []).map((extra, index) => (
                 <View key={index} style={{ marginBottom: "4px" }}>
-                <Text
-                  style={{
-                    ...styles.blueAndWhiteText,
-                    opacity: "0.8",
-                  }}
-                >
-                  {extra || ""}
-                </Text>
-              </View>
-            ))}
-          </View>
-        </>
-      )}
+                  <Text
+                    style={{
+                      ...styles.blueAndWhiteText,
+                      opacity: "0.8",
+                    }}
+                  >
+                    {extra || ""}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </>
+        )}
+      </View>
     </View>
-  </View>
-);
+  );
 };
 
 export default WhiteAndBluePdf;

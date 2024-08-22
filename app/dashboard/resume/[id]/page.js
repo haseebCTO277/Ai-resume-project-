@@ -1,28 +1,27 @@
 //Users/mohsinal/airesume-5/app/dashboard/resume/[id]/page.js
 
-'use client';
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import styled from 'styled-components';
+import styled from "styled-components";
 import { Button } from "@/components/ui/button";
-import { FaDownload, FaLinkedin, FaSave } from 'react-icons/fa';
+import { FaDownload, FaLinkedin, FaSave } from "react-icons/fa";
 import BlackAndWhite from "@/components/themes/resume/BlackAndWhite";
 import BlueAndWhite from "@/components/themes/resume/BlueAndWhite";
 import WhiteAndBlue from "@/components/themes/resume/WhiteAndBlue";
-import OceanTheme from "@/components/themes/resume/OceanTheme"; 
+import OceanTheme from "@/components/themes/resume/OceanTheme";
 import EditorActions from "../../EditorActions";
 import ResumeNav from "../../ResumeNav";
 import ColorPicker from "@/components/ColorPicker";
 import ResumeSideNav from "../../ResumeSideNav";
-import ReactModal from 'react-modal';
+import ReactModal from "react-modal";
 import ButtonCheckout from "@/components/ButtonCheckout";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ThemePdf from "@/components/themes/resume/pdf";
-import { useLanguage } from '../../../../contexts/LanguageContext';
-import { resumeTranslations } from '../../../../locales/resumeTranslations';
+import { useLanguage } from "../../../../contexts/LanguageContext";
+import { resumeTranslations } from "../../../../locales/resumeTranslations";
 import LanguageToggle from "@/components/LanguageToggle";
-
 
 const MainContainer = styled.div`
   display: flex;
@@ -55,9 +54,9 @@ const StyledButton = styled(Button)`
 
   @media (max-width: 768px) {
     max-width: 100%;
-    width: 200px;  // Set width to 200px on small screens
-    flex-direction: column;  // Stack icon and text vertically
-    padding: 0.5rem;  // Adjust padding for the new layout
+    width: 200px; // Set width to 200px on small screens
+    flex-direction: column; // Stack icon and text vertically
+    padding: 0.5rem; // Adjust padding for the new layout
   }
 
   &:hover {
@@ -93,8 +92,12 @@ const LoadingSpinner = styled.div`
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -222,7 +225,7 @@ const DropdownContainer = styled.div`
 `;
 
 const DropdownContent = styled.div`
-  display: ${(props) => (props.show ? 'block' : 'none')};
+  display: ${(props) => (props.show ? "block" : "none")};
   position: absolute;
   top: 100%;
   left: 0;
@@ -250,8 +253,9 @@ const StatusMessage = styled.div`
   font-weight: bold;
   z-index: 1000;
   transition: opacity 0.3s ease-in-out;
-  opacity: ${props => props.visible ? 1 : 0};
-  background-color: ${props => props.type === 'success' ? '#4CAF50' : '#F44336'};
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  background-color: ${(props) =>
+    props.type === "success" ? "#4CAF50" : "#F44336"};
   color: white;
 `;
 
@@ -272,15 +276,28 @@ export default function ResumePage({ params }) {
     phone: "",
     email: "",
     summary: "",
-    experiences: Array(1).fill({ position: "", company: "", location: "", duration: "", responsibilities: Array(5).fill('') }),
-    education: Array(1).fill({ institution: "", graduationYear: "", degree: "" }),
+    experiences: Array(1).fill({
+      position: "",
+      company: "",
+      location: "",
+      duration: "",
+      responsibilities: Array(5).fill(""),
+    }),
+    education: Array(1).fill({
+      institution: "",
+      graduationYear: "",
+      degree: "",
+    }),
     skills: Array(5).fill(""),
     hobbies: Array(1).fill(""),
     software: Array(1).fill(""),
     languages: Array(1).fill(""),
     certificates: Array(1).fill({ name: "", year: "" }),
     extraSection: Array(1).fill(""),
-    extraDetailedSection: Array(1).fill({ title: "", details: Array(1).fill("") }),
+    extraDetailedSection: Array(1).fill({
+      title: "",
+      details: Array(1).fill(""),
+    }),
     resumeColor: "#000000",
     fontFamily: "Times New Roman",
     age: 0,
@@ -294,12 +311,13 @@ export default function ResumePage({ params }) {
       extraDetailedSection: false,
     },
   });
+  let [passResumeData, setPassResumeData] = useState("");
   const [showLinkedInDropdown, setShowLinkedInDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const [linkedinProfileUrl, setLinkedinProfileUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [fullNameColor, setFullNameColor] = useState('#000000');
+  const [fullNameColor, setFullNameColor] = useState("#000000");
   const [hoveredColor, setHoveredColor] = useState(resume.resumeColor);
   const [hoveredFont, setHoveredFont] = useState(resume.fontFamily);
   const [selectedFont, setSelectedFont] = useState(resume.fontFamily);
@@ -318,29 +336,85 @@ export default function ResumePage({ params }) {
   const [showFontDropdown, setShowFontDropdown] = useState(false);
   const resumeRef = useRef(null);
   const summaryRef = useRef(null);
-  const [statusMessage, setStatusMessage] = useState({ text: '', type: '', visible: false });
+  const [statusMessage, setStatusMessage] = useState({
+    text: "",
+    type: "",
+    visible: false,
+  });
 
   const colors = [
-    "#8C1515", "#A41034", "#C70039", "#FF5733", "#900C3F",
-    "#005430", "#33FF57", "#33FFA1", "#00FF7F", "#32CD32",
-    "#002147", "#2774AE", "#3357FF", "#0000FF", "#87CEEB",
-    "#FFD100", "#FFC300", "#FF851B", "#FFA500", "#FFD700",
-    "#000000", "#333333", "#666666", "#999999", "#CCCCCC",
-    "#581845", "#800080", "#A133FF", "#9370DB", "#D8BFD8"
+    "#8C1515",
+    "#A41034",
+    "#C70039",
+    "#FF5733",
+    "#900C3F",
+    "#005430",
+    "#33FF57",
+    "#33FFA1",
+    "#00FF7F",
+    "#32CD32",
+    "#002147",
+    "#2774AE",
+    "#3357FF",
+    "#0000FF",
+    "#87CEEB",
+    "#FFD100",
+    "#FFC300",
+    "#FF851B",
+    "#FFA500",
+    "#FFD700",
+    "#000000",
+    "#333333",
+    "#666666",
+    "#999999",
+    "#CCCCCC",
+    "#581845",
+    "#800080",
+    "#A133FF",
+    "#9370DB",
+    "#D8BFD8",
   ];
-  
-  const fonts = [
-    "Times New Roman", "Arial", "Verdana", 
-    "Georgia", "Trebuchet MS", "Comic Sans MS",
-    "Tahoma", "Alex Brush", "Arima", "Anton SC", "Amiri", "Zain"
-  ];
-  
-  
+
+  const fonts =
+    language === "ar"
+      ? [
+          "Times New Roman",
+          "Arial",
+          "Verdana",
+          "Georgia",
+          "Trebuchet MS",
+          "Comic Sans MS",
+          "Tahoma",
+          "Alex Brush",
+          "Arima",
+          "Anton SC",
+
+          "Amiri",
+          "Zain",
+          "Reem Kufi Fun",
+          "Amiri Quran",
+          "Alkalami",
+        ]
+      : [
+          "Times New Roman",
+          "Arial",
+          "Verdana",
+          "Georgia",
+          "Trebuchet MS",
+          "Comic Sans MS",
+          "Tahoma",
+          "Alex Brush",
+          "Arima",
+          "Anton SC",
+          "Amiri",
+        ];
 
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const response = await axios.get(`/api/resumes/${id}`, { withCredentials: true });
+        const response = await axios.get(`/api/resumes/${id}`, {
+          withCredentials: true,
+        });
         const resumeData = response.data.data;
         setResume(resumeData);
         setFullNameColor(resumeData.resumeColor || "#000000");
@@ -348,14 +422,16 @@ export default function ResumePage({ params }) {
         setSelectedFont(resumeData.fontFamily || "Times New Roman");
         setHoveredFont(resumeData.fontFamily || "Times New Roman");
         setSelectedTheme(resumeData.theme || "BlackAndWhite");
-        setSectionsVisibility(resumeData.sectionsVisibility || {
-          hobbies: false,
-          software: false,
-          extraSection: false,
-          certificates: false,
-          languages: false,
-          extraDetailedSection: false,
-        });
+        setSectionsVisibility(
+          resumeData.sectionsVisibility || {
+            hobbies: false,
+            software: false,
+            extraSection: false,
+            certificates: false,
+            languages: false,
+            extraDetailedSection: false,
+          }
+        );
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -401,8 +477,15 @@ export default function ResumePage({ params }) {
   };
 
   const showStatusMessage = (text, type) => {
-    setStatusMessage({ text: t.statusMessages[text] || text, type, visible: true });
-    setTimeout(() => setStatusMessage(prev => ({ ...prev, visible: false })), 3000);
+    setStatusMessage({
+      text: t.statusMessages[text] || text,
+      type,
+      visible: true,
+    });
+    setTimeout(
+      () => setStatusMessage((prev) => ({ ...prev, visible: false })),
+      3000
+    );
   };
 
   const handleSave = async () => {
@@ -421,8 +504,11 @@ export default function ResumePage({ params }) {
 
   const saveResume = async (updatedResume) => {
     try {
-      const response = await axios.put(`/api/resumes/${id}`, updatedResume, { withCredentials: true });
+      const response = await axios.put(`/api/resumes/${id}`, updatedResume, {
+        withCredentials: true,
+      });
       setResume(response.data.data);
+      // setResumeTemp(response.data.data);
     } catch (error) {
       console.error("Error saving resume:", error);
       throw error;
@@ -480,7 +566,10 @@ export default function ResumePage({ params }) {
       setShowLinkedInDropdown(false);
       showStatusMessage("LinkedIn profile imported successfully!", "success");
     } catch (error) {
-      showStatusMessage("Failed to import LinkedIn profile. Please try again.", "error");
+      showStatusMessage(
+        "Failed to import LinkedIn profile. Please try again.",
+        "error"
+      );
     } finally {
       setIsImporting(false);
     }
@@ -508,15 +597,67 @@ export default function ResumePage({ params }) {
   const renderTheme = () => {
     switch (selectedTheme) {
       case "BlackAndWhite":
-        return <BlackAndWhite resumeData={resume} setResumeData={setResume} fullNameColor={hoveredColor} fontFamily={hoveredFont} sectionsVisibility={sectionsVisibility} summaryRef={summaryRef} />;
+        return (
+          <BlackAndWhite
+            resumeData={resume}
+            setResumeData={setResume}
+            fullNameColor={hoveredColor}
+            fontFamily={hoveredFont}
+            sectionsVisibility={sectionsVisibility}
+            summaryRef={summaryRef}
+            setPassResumeData={setPassResumeData}
+            print={false}
+          />
+        );
       case "BlueAndWhite":
-        return <BlueAndWhite resumeData={resume} setResumeData={setResume} fullNameColor={hoveredColor} fontFamily={hoveredFont} sectionsVisibility={sectionsVisibility} />;
+        return (
+          <BlueAndWhite
+            resumeData={resume}
+            setResumeData={setResume}
+            fullNameColor={hoveredColor}
+            fontFamily={hoveredFont}
+            sectionsVisibility={sectionsVisibility}
+            setPassResumeData={setPassResumeData}
+            print={false}
+          />
+        );
       case "OceanTheme":
-        return <OceanTheme resumeData={resume} setResumeData={setResume} fullNameColor={hoveredColor} fontFamily={hoveredFont} sectionsVisibility={sectionsVisibility} />;
+        return (
+          <OceanTheme
+            resumeData={resume}
+            setResumeData={setResume}
+            fullNameColor={hoveredColor}
+            fontFamily={hoveredFont}
+            sectionsVisibility={sectionsVisibility}
+            setPassResumeData={setPassResumeData}
+            print={false}
+          />
+        );
       case "WhiteAndBlue":
-        return <WhiteAndBlue resumeData={resume} setResumeData={setResume} fullNameColor={hoveredColor} fontFamily={hoveredFont} sectionsVisibility={sectionsVisibility} />;
+        return (
+          <WhiteAndBlue
+            resumeData={resume}
+            setResumeData={setResume}
+            fullNameColor={hoveredColor}
+            fontFamily={hoveredFont}
+            sectionsVisibility={sectionsVisibility}
+            setPassResumeData={setPassResumeData}
+            print={false}
+          />
+        );
       default:
-        return <BlackAndWhite resumeData={resume} setResumeData={setResume} fullNameColor={hoveredColor} fontFamily={hoveredFont} sectionsVisibility={sectionsVisibility} summaryRef={summaryRef} />;
+        return (
+          <BlackAndWhite
+            resumeData={resume}
+            setResumeData={setResume}
+            fullNameColor={hoveredColor}
+            fontFamily={hoveredFont}
+            sectionsVisibility={sectionsVisibility}
+            summaryRef={summaryRef}
+            setPassResumeData={setPassResumeData}
+            print={false}
+          />
+        );
     }
   };
 
@@ -528,22 +669,41 @@ export default function ResumePage({ params }) {
           ...prevResume,
           fullName: data.full_name || prevResume.fullName,
           professionalTitle: data.occupation || prevResume.professionalTitle,
-          location: `${data.city}, ${data.state}, ${data.country}` || prevResume.location,
+          location:
+            `${data.city}, ${data.state}, ${data.country}` ||
+            prevResume.location,
           summary: data.summary || prevResume.summary,
-          experiences: data.experiences && data.experiences.length ? data.experiences.map(exp => ({
-            position: exp.title,
-            company: exp.company,
-            location: exp.location,
-            duration: `${exp.starts_at?.year || ''}-${exp.starts_at?.month || 1}-${exp.starts_at?.day || 1} to ${exp.ends_at ? `${exp.ends_at.year}-${exp.ends_at.month || 1}-${exp.ends_at.day || 1}` : 'Present'}`,
-            responsibilities: [],
-          })) : prevResume.experiences,
-          education: data.education && data.education.length ? data.education.map(edu => ({
-            institution: edu.school,
-            year: `${edu.starts_at?.year || ''}-${edu.ends_at?.year || ''}`,
-            degree: edu.degree_name,
-          })) : prevResume.education,
-          skills: data.skills && data.skills.length ? data.skills : prevResume.skills,
-          linkedin: linkedinProfileUrl
+          experiences:
+            data.experiences && data.experiences.length
+              ? data.experiences.map((exp) => ({
+                  position: exp.title,
+                  company: exp.company,
+                  location: exp.location,
+                  duration: `${exp.starts_at?.year || ""}-${
+                    exp.starts_at?.month || 1
+                  }-${exp.starts_at?.day || 1} to ${
+                    exp.ends_at
+                      ? `${exp.ends_at.year}-${exp.ends_at.month || 1}-${
+                          exp.ends_at.day || 1
+                        }`
+                      : "Present"
+                  }`,
+                  responsibilities: [],
+                }))
+              : prevResume.experiences,
+          education:
+            data.education && data.education.length
+              ? data.education.map((edu) => ({
+                  institution: edu.school,
+                  year: `${edu.starts_at?.year || ""}-${
+                    edu.ends_at?.year || ""
+                  }`,
+                  degree: edu.degree_name,
+                }))
+              : prevResume.education,
+          skills:
+            data.skills && data.skills.length ? data.skills : prevResume.skills,
+          linkedin: linkedinProfileUrl,
         };
         updateColorsAndFonts(newResume);
         return newResume;
@@ -557,7 +717,10 @@ export default function ResumePage({ params }) {
 
   const fetchLinkedInProfile = async (linkedinProfileUrl, resumeId) => {
     try {
-      const response = await axios.post('/api/linkedin', { linkedinProfileUrl, resumeId });
+      const response = await axios.post("/api/linkedin", {
+        linkedinProfileUrl,
+        resumeId,
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching LinkedIn profile:", error);
@@ -587,7 +750,7 @@ export default function ResumePage({ params }) {
   });
 
   const toggleDropdown = () => {
-    setDropdownOpen(prevState => !prevState);
+    setDropdownOpen((prevState) => !prevState);
   };
 
   const handleLinkedInClick = () => {
@@ -611,12 +774,12 @@ export default function ResumePage({ params }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   if (loading) return <div>{t.loading}</div>;
   if (error) return <div>{error}</div>;
 
   return (
-    <MainContainer style={{ direction: language === 'ar' ? 'rtl' : 'ltr' }}>
+    <MainContainer style={{ direction: language === "ar" ? "rtl" : "ltr" }}>
       <StatusMessage visible={statusMessage.visible} type={statusMessage.type}>
         {statusMessage.text}
       </StatusMessage>
@@ -629,10 +792,12 @@ export default function ResumePage({ params }) {
           selectedTheme={selectedTheme}
           handleSave={handleSave}
           isSaving={isSaving}
+          passResumeData={passResumeData}
+          setPassResumeData={setPassResumeData}
         />
       </NavWrapper>
-      <MobileSideNav className={mobileSideNavOpen ? 'open' : ''}>
-        <ResumeSideNav 
+      <MobileSideNav className={mobileSideNavOpen ? "open" : ""}>
+        <ResumeSideNav
           resume={resume}
           setResume={setResume}
           theme={selectedTheme}
@@ -640,9 +805,9 @@ export default function ResumePage({ params }) {
         />
         <CloseButton onClick={() => setMobileSideNavOpen(false)}>✕</CloseButton>
       </MobileSideNav>
-      <ContentContainer style={{ direction: 'ltr' }}>
+      <ContentContainer style={{ direction: "ltr" }}>
         <ResumeSideNavContainer>
-          <ResumeSideNav 
+          <ResumeSideNav
             resume={resume}
             setResume={setResume}
             theme={selectedTheme}
@@ -653,7 +818,9 @@ export default function ResumePage({ params }) {
           <DropdownContainer>
             {!modalIsOpen && (
               <DropdownContent show={dropdownOpen}>
-                <DropdownItemStyled onClick={handleLinkedInClick}>Import from LinkedIn</DropdownItemStyled>
+                <DropdownItemStyled onClick={handleLinkedInClick}>
+                  Import from LinkedIn
+                </DropdownItemStyled>
                 <DropdownItemStyled>
                   <ButtonCheckout priceId="price_1M2jDkIEQZQ1iQDEIQQ6MwkJ" />
                 </DropdownItemStyled>
@@ -662,42 +829,42 @@ export default function ResumePage({ params }) {
             )}
           </DropdownContainer>
           <ButtonContainer>
-        <LinkedInButtonWrapper ref={dropdownRef}>
-          <StyledButton
-            onClick={() => setShowLinkedInDropdown(!showLinkedInDropdown)}
-            className="bg-blue-600 text-white px-2"
-            disabled={isImporting}
-          >
-            {isImporting ? (
-              <LoadingSpinner />
-            ) : (
-              <>
-                <FaLinkedin />
-                <span>{t.importLinkedIn}</span>
-              </>
-            )}
-          </StyledButton>
-
-          {showLinkedInDropdown && (
-            <LinkedInDropdown>
-              <LinkedInInput
-                type="text"
-                placeholder={t.linkedInPlaceholder}
-                value={linkedinProfileUrl}
-                onChange={(e) => setLinkedinProfileUrl(e.target.value)}
-              />
-              <LinkedInExample>{t.linkedInExample}</LinkedInExample>
-              <DropdownButton
-                onClick={handleImport}
+            <LinkedInButtonWrapper ref={dropdownRef}>
+              <StyledButton
+                onClick={() => setShowLinkedInDropdown(!showLinkedInDropdown)}
                 className="bg-blue-600 text-white px-2"
                 disabled={isImporting}
               >
-                {isImporting ? <LoadingSpinner /> : t.submit}
-              </DropdownButton>
-            </LinkedInDropdown>
-          )}
-        </LinkedInButtonWrapper>
-      </ButtonContainer>
+                {isImporting ? (
+                  <LoadingSpinner />
+                ) : (
+                  <>
+                    <FaLinkedin />
+                    <span>{t.importLinkedIn}</span>
+                  </>
+                )}
+              </StyledButton>
+
+              {showLinkedInDropdown && (
+                <LinkedInDropdown>
+                  <LinkedInInput
+                    type="text"
+                    placeholder={t.linkedInPlaceholder}
+                    value={linkedinProfileUrl}
+                    onChange={(e) => setLinkedinProfileUrl(e.target.value)}
+                  />
+                  <LinkedInExample>{t.linkedInExample}</LinkedInExample>
+                  <DropdownButton
+                    onClick={handleImport}
+                    className="bg-blue-600 text-white px-2"
+                    disabled={isImporting}
+                  >
+                    {isImporting ? <LoadingSpinner /> : t.submit}
+                  </DropdownButton>
+                </LinkedInDropdown>
+              )}
+            </LinkedInButtonWrapper>
+          </ButtonContainer>
           <EditorActions
             onSelectColor={handleColorSelect}
             onHoverColor={handleColorHover}
@@ -710,23 +877,21 @@ export default function ResumePage({ params }) {
             colors={colors}
             fonts={fonts}
           />
-       <CheckboxContainer>
-        {Object.keys(sectionsVisibility).map((section) => (
-          <CheckboxLabel key={section}>
-            <input
-              type="checkbox"
-              name={section}
-              checked={sectionsVisibility[section]}
-              onChange={handleSectionVisibilityChange}
-            />
-            {t.sections[section]}
-          </CheckboxLabel>
-        ))}
-      </CheckboxContainer>
+          <CheckboxContainer>
+            {Object.keys(sectionsVisibility).map((section) => (
+              <CheckboxLabel key={section}>
+                <input
+                  type="checkbox"
+                  name={section}
+                  checked={sectionsVisibility[section]}
+                  onChange={handleSectionVisibilityChange}
+                />
+                {t.sections[section]}
+              </CheckboxLabel>
+            ))}
+          </CheckboxContainer>
 
-          <div ref={resumeRef}>
-            {renderTheme()}
-          </div>
+          <div ref={resumeRef}>{renderTheme()}</div>
         </ResumeContainer>
       </ContentContainer>
       <ReactModal
@@ -735,20 +900,20 @@ export default function ResumePage({ params }) {
         contentLabel="Import from LinkedIn"
         style={{
           content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: '#fff',
-            padding: '20px',
-            borderRadius: '10px',
-            maxWidth: '500px',
-            width: '100%',
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "10px",
+            maxWidth: "500px",
+            width: "100%",
           },
           overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
           },
         }}
       >
@@ -758,19 +923,24 @@ export default function ResumePage({ params }) {
           placeholder="LinkedIn Profile URL"
           value={linkedinProfileUrl}
           onChange={(e) => setLinkedinProfileUrl(e.target.value)}
-          style={{ margin: '20px 0', padding: '10px', width: '100%', color: 'black'}}
+          style={{
+            margin: "20px 0",
+            padding: "10px",
+            width: "100%",
+            color: "black",
+          }}
         />
         <Button
           onClick={handleLinkedInImport}
           className="py-4 px-12 text-lg m-4 bg-blue-600 text-white"
-          style={{ width: '250px' }}
+          style={{ width: "250px" }}
         >
           Submit
         </Button>
         <Button
           onClick={closeModal}
           className="py-4 px-12 text-lg m-4 bg-red-600 text-white"
-          style={{ width: '250px' }}
+          style={{ width: "250px" }}
         >
           Cancel
         </Button>

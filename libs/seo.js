@@ -2,7 +2,7 @@ import config from "@/config";
 
 // These are all the SEO tags you can add to your pages.
 // It prefills data with default title/description/OG, etc.. and you can cusotmize it for each page.
-// It's already added in the roo.t layout.js  so you don't have to add it to every pages
+// It's already added in the root layout.js so you don't have to add it to every pages
 // But I recommend to set the canonical URL for each page (export const metadata = getSEOTags({canonicalUrlRelative: "/"});)
 // See https://shipfa.st/docs/features/seo
 export const getSEOTags = ({

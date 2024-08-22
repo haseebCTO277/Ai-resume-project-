@@ -14,7 +14,7 @@ export const LanguageProvider = ({ children }) => {
   useEffect(() => {
     const initLanguage = async () => {
       console.log('Initializing language...');
-      const savedLanguage = localStorage.getItem('language');
+      const savedLanguage = localStorage.getItem('language') ;
       let detectedLanguage;
       if (savedLanguage && supportedLanguages.includes(savedLanguage)) {
         detectedLanguage = savedLanguage;

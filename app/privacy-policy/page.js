@@ -97,7 +97,7 @@ We may update this Privacy Policy from time to time to reflect changes in our pr
 
 If you have any questions, concerns, or requests related to this Privacy Policy, you can contact us at:
 
-Email: support@magicalresume.com
+Email: support@magicalresume.ai
 
 For all other inquiries, please visit our Contact Us page on the Website.
 

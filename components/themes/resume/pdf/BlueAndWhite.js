@@ -1,7 +1,7 @@
-import { Text, View } from "@react-pdf/renderer";
-import React from "react";
+import { Text, View, Font } from "@react-pdf/renderer";
+import React, { useRef } from "react";
 import LinkContent from "./LinkContent";
-import { displayedresumeThemesTranslations } from '../../../../locales/displayedresumeThemesTranslations';
+import { displayedresumeThemesTranslations } from "../../../../locales/displayedresumeThemesTranslations";
 
 const PersonalInfo = ({ label, value, t }) => {
   return (
@@ -91,9 +91,11 @@ export const BlueAndWhitePdf = ({
   sectionsVisibility,
   fullNameColor,
   styles,
-  language
+  language,
 }) => {
-  const t = displayedresumeThemesTranslations[language] || displayedresumeThemesTranslations.en;
+  const t =
+    displayedresumeThemesTranslations[language] ||
+    displayedresumeThemesTranslations.en;
   const darkenedColor = darkenColor(fullNameColor, -40);
 
   return (
@@ -151,10 +153,18 @@ export const BlueAndWhitePdf = ({
           {/* Personal Info */}
           <SectionTitle label={t.personalInfo} darkenedColor={darkenedColor} />
           <View style={{ paddingLeft: "10px", paddingRight: "15px" }}>
-            <PersonalInfo value={resumeData.location || ""} label="location" t={t} />
+            <PersonalInfo
+              value={resumeData.location || ""}
+              label="location"
+              t={t}
+            />
             <PersonalInfo value={resumeData.phone || ""} label="phone" t={t} />
             <PersonalInfo value={resumeData.email || ""} label="email" t={t} />
-            <PersonalInfo value={resumeData.linkedin || ""} label="linkedin" t={t} />
+            <PersonalInfo
+              value={resumeData.linkedin || ""}
+              label="linkedin"
+              t={t}
+            />
           </View>
           {/* SKILLS */}
           <SectionTitle label={t.skills} darkenedColor={darkenedColor} />
@@ -342,16 +352,23 @@ export const BlueAndWhitePdf = ({
                       {experience.duration || ""}
                     </Text>
                   </View>
-
                   <View>
                     {(experience.responsibilities || []).map(
                       (responsibility, resIndex) => (
-                        <View key={resIndex} style={{ paddingLeft: "10px" }}>
+                        <View
+                          key={resIndex}
+                          style={{
+                            paddingLeft: "10px",
+                            position: "relative",
+                          }}
+                        >
                           <Text
                             style={{
                               ...styles.blueAndWhiteText,
                               color: "#000",
                               marginBottom: "2px",
+                              marginRight: "13px",
+                              family: "NotoSansArabic",
                             }}
                           >
                             {responsibility || ""}

@@ -1,22 +1,34 @@
 //Users/mohsinal/airesume-5/app/dashboard/ResumeNav.js
-
-import React, { useState, useRef, useEffect } from 'react';
+import Head from "next/head";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import styled, { keyframes } from 'styled-components';
-import { FaDownload, FaSave, FaWhatsapp, FaFacebook, FaTwitter, FaShare } from 'react-icons/fa';
-import { MdContentCopy } from 'react-icons/md';
+import styled, { keyframes } from "styled-components";
+import {
+  FaDownload,
+  FaSave,
+  FaWhatsapp,
+  FaFacebook,
+  FaTwitter,
+  FaShare,
+} from "react-icons/fa";
+import { MdContentCopy } from "react-icons/md";
 import ButtonAccount from "@/components/ButtonAccount";
 import ThemePdf from "@/components/themes/resume/pdf";
 import ButtonCheckout from "@/components/ButtonCheckout";
-import axios from 'axios';
-import Confetti from './Confetti'; 
-import { useLanguage } from '../../contexts/LanguageContext';
-import { resumeTranslations } from '../../locales/resumeTranslations';
+import axios from "axios";
+import Confetti from "./Confetti";
+import { useLanguage } from "../../contexts/LanguageContext";
+import { resumeTranslations } from "../../locales/resumeTranslations";
 import LanguageToggle from "@/components/LanguageToggle";
-import config from '../../config';
+import config from "../../config";
+import { useReactToPrint } from "react-to-print";
+import BlueAndWhite from "@/components/themes/resume/BlueAndWhite";
+import BlackAndWhite from "@/components/themes/resume/BlackAndWhite";
+import OceanTheme from "@/components/themes/resume/OceanTheme";
+import WhiteAndBlue from "@/components/themes/resume/WhiteAndBlue";
 
 // Styled components
 const Nav = styled.nav`
@@ -25,10 +37,10 @@ const Nav = styled.nav`
   align-items: center;
   background-color: #fff;
   padding: 10px 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
   position: fixed;
-  top: ${props => props.notificationVisible ? '42px' : '0'};
+  top: ${(props) => (props.notificationVisible ? "42px" : "0")};
   left: 0;
   z-index: 1000;
   margin-bottom: 15px;
@@ -68,7 +80,7 @@ const ButtonContainer = styled.div`
 const TopButtonRow = styled.div`
   display: flex;
   gap: 1rem;
-  
+
   @media (max-width: 750px) {
     width: 100%;
     justify-content: center;
@@ -115,7 +127,7 @@ const ShareButton = styled(StyledButton)`
   position: relative;
   color: #333;
   background-color: white;
-  border: 2px solid #2196F3;
+  border: 2px solid #2196f3;
   font-size: 1rem;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(33, 150, 243, 0.3);
@@ -129,7 +141,7 @@ const ShareButton = styled(StyledButton)`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(33, 150, 243, 0.4);
-    background-color: #E3F2FD;
+    background-color: #e3f2fd;
   }
 
   svg {
@@ -143,11 +155,11 @@ const ShareButton = styled(StyledButton)`
     height: 48px;
     padding: 0;
     border-radius: 50%;
-    
+
     svg {
       margin-right: 0;
     }
-    
+
     span {
       display: none;
     }
@@ -157,7 +169,7 @@ const ShareButton = styled(StyledButton)`
 const RightContainer = styled.div`
   display: flex;
   align-items: center;
-  
+
   @media (max-width: 750px) {
     flex-grow: 1;
     justify-content: flex-end;
@@ -173,9 +185,9 @@ const ShareDropdown = styled.div`
   background-color: #fff;
   padding: 10px;
   border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   min-width: 200px;
-  display: ${props => props.isVisible ? 'block' : 'none'};
+  display: ${(props) => (props.isVisible ? "block" : "none")};
 `;
 
 const ShareOptions = styled.div`
@@ -247,13 +259,13 @@ const FullWidthNotification = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   background-color: white;
-  color: #4CAF50;
-  border-bottom: 2px solid #4CAF50;
+  color: #4caf50;
+  border-bottom: 2px solid #4caf50;
   padding: 10px 0;
   margin: 0;
   z-index: 1001;
-  opacity: ${props => props.show ? 1 : 0};
-  pointer-events: ${props => props.show ? 'auto' : 'none'};
+  opacity: ${(props) => (props.show ? 1 : 0)};
+  pointer-events: ${(props) => (props.show ? "auto" : "none")};
   transition: opacity 0.5s ease-in-out;
 `;
 
@@ -314,21 +326,22 @@ const Price = styled.p`
 const FeatureList = styled.ul`
   list-style-type: none;
   padding: 0;
-  text-align: ${props => props.language === 'ar' ? 'right' : 'left'};
+  text-align: ${(props) => (props.language === "ar" ? "right" : "left")};
   margin: 1rem 0;
-  direction: ${props => props.language === 'ar' ? 'rtl' : 'ltr'};
+  direction: ${(props) => (props.language === "ar" ? "rtl" : "ltr")};
 `;
 
 const Feature = styled.li`
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  justify-content: ${props => props.language === 'ar' ? 'flex-end' : 'flex-start'};
+  justify-content: ${(props) =>
+    props.language === "ar" ? "flex-end" : "flex-start"};
 
-  &::${props => props.language === 'ar' ? 'after' : 'before'} {
+  &::${(props) => (props.language === "ar" ? "after" : "before")} {
     content: '✓';
     color: #4caf50;
-    margin-${props => props.language === 'ar' ? 'right' : 'left'}: 0.5rem;
+    margin-${(props) => (props.language === "ar" ? "right" : "left")}: 0.5rem;
   }
 `;
 
@@ -373,10 +386,10 @@ const DownloadButton = styled(StyledButton)`
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: ${props => props.userHasAccess ? pulse : grayPulse} 2s infinite;
+  animation: ${(props) => (props.userHasAccess ? pulse : grayPulse)} 2s infinite;
 
   @media (max-width: 750px) {
-    width: 130px;
+    width: 160px;
     height: 48px;
     padding: 4px;
     border-radius: 12px;
@@ -384,7 +397,7 @@ const DownloadButton = styled(StyledButton)`
 
     span {
       display: inline;
-      font-size: 0.85rem; // Reduce font size for mobile
+      font-size: 0.9rem; // Reduce font size for mobile
     }
   }
 `;
@@ -395,7 +408,7 @@ const SaveButton = styled(StyledButton)`
   border-radius: 6px;
 
   @media (max-width: 750px) {
-    width: 90px;
+    width: 100px;
     height: 48px;
     padding: 4px;
     border-radius: 12px;
@@ -403,7 +416,7 @@ const SaveButton = styled(StyledButton)`
 
     span {
       display: inline;
-      font-size: 0.8rem; // Reduce font size for mobile
+      font-size: 0.9rem; // Reduce font size for mobile
     }
   }
 `;
@@ -412,11 +425,11 @@ const CheckoutButton = styled(ButtonCheckout)`
   width: 200px;
   height: 48px;
   border-radius: 6px;
-  animation: ${props => props.userHasAccess ? pulse : grayPulse} 2s infinite;
-  background-color: ${props => props.userHasAccess ? '#3498db' : '#333'};
+  animation: ${(props) => (props.userHasAccess ? pulse : grayPulse)} 2s infinite;
+  background-color: ${(props) => (props.userHasAccess ? "#3498db" : "#333")};
   color: white;
   cursor: pointer;
-  
+
   @media (max-width: 750px) {
     width: 120px;
     height: 48px;
@@ -443,14 +456,14 @@ const SubscriptionPopup = ({ onClose }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [onClose]);
 
   return (
-    <PopupOverlay>
+    <PopupOverlay className="hidePrintClass">
       <PopupContent ref={popupRef} language={language}>
         <PopupHeader>
           <Title>{t.subscriptionPopup.title}</Title>
@@ -458,26 +471,39 @@ const SubscriptionPopup = ({ onClose }) => {
         <Subtitle>{t.subscriptionPopup.subtitle}</Subtitle>
         <Price>{t.subscriptionPopup.price}</Price>
 
-        <CheckoutButton userHasAccess={true}>
-          {t.subscribeNow}
-        </CheckoutButton>
-        
+        <CheckoutButton userHasAccess={true}>{t.subscribeNow}</CheckoutButton>
+
         <FeatureList language={language}>
           {t.subscriptionPopup.features.map((feature, index) => (
-            <Feature key={index} language={language}>{feature}</Feature>
+            <Feature key={index} language={language}>
+              {feature}
+            </Feature>
           ))}
         </FeatureList>
-        <CloseButton onClick={onClose}>{t.subscriptionPopup.closeButton}</CloseButton>
+        <CloseButton onClick={onClose}>
+          {t.subscriptionPopup.closeButton}
+        </CloseButton>
       </PopupContent>
     </PopupOverlay>
   );
 };
 
 // ResumeDownloadButton component
-const ResumeDownloadButton = ({ userHasAccess, resumeData, sectionsVisibility, hoveredColor, hoveredFont, selectedTheme, showNotification }) => {
+const ResumeDownloadButton = ({
+  userHasAccess,
+  resumeData,
+  sectionsVisibility,
+  hoveredColor,
+  hoveredFont,
+  selectedTheme,
+  showNotification,
+  passResumeData,
+  setPassResumeData,
+}) => {
   const [showPopup, setShowPopup] = useState(false);
   const { language } = useLanguage();
   const t = resumeTranslations[language] || resumeTranslations.en;
+  console.log("selectedTheme: ", selectedTheme);
 
   const handleButtonClick = (e) => {
     if (!userHasAccess) {
@@ -488,52 +514,119 @@ const ResumeDownloadButton = ({ userHasAccess, resumeData, sectionsVisibility, h
     }
   };
 
+  const printRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+  });
+
   return (
     <>
-      <PDFDownloadLink
-        document={
-          <ThemePdf 
-            resumeData={resumeData}  
-            sectionsVisibility={sectionsVisibility} 
-            fullNameColor={hoveredColor || "#000"} 
-            fontFamily={hoveredFont} 
-            selectedTheme={selectedTheme}
-            language={language}
-          />
-        }
-        fileName="resume.pdf"
-        key={`pdf-${language}`} 
-      >
-        {({ blob, url, loading, error }) => (
-          <DownloadButton 
+      {language !== "ar" ? (
+        <PDFDownloadLink
+          document={
+            <ThemePdf
+              resumeData={resumeData}
+              sectionsVisibility={sectionsVisibility}
+              fullNameColor={hoveredColor || "#000"}
+              fontFamily={hoveredFont}
+              selectedTheme={selectedTheme}
+              language={language}
+            />
+          }
+          fileName="resume.pdf"
+          key={`pdf-${language}`}
+        >
+          {({ blob, url, loading, error }) => (
+            <>
+              <DownloadButton
+                style={{
+                  backgroundColor: userHasAccess ? "#3498db" : "#333",
+                  cursor: "pointer",
+                }}
+                onClick={handleButtonClick}
+                title={t.downloadPDF}
+                userHasAccess={userHasAccess}
+              >
+                <FaDownload />
+                <span>{t.downloadPDF}</span>
+              </DownloadButton>
+            </>
+          )}
+        </PDFDownloadLink>
+      ) : (
+        <>
+          <DownloadButton
             style={{
-              backgroundColor: userHasAccess ? '#3498db' : '#333',
-              cursor: 'pointer',
+              backgroundColor: userHasAccess ? "#3498db" : "#333",
+              cursor: "pointer",
             }}
-            onClick={handleButtonClick}
+            onClick={language === "ar" ? handlePrint : handleButtonClick}
             title={t.downloadPDF}
             userHasAccess={userHasAccess}
           >
             <FaDownload />
             <span>{t.downloadPDF}</span>
           </DownloadButton>
-        )}
-      </PDFDownloadLink>
+          <div className="showOnPrint" ref={printRef}>
+            {selectedTheme === "BlackAndWhite" ? (
+              <BlackAndWhite
+                resumeData={resumeData}
+                setResumeData={setPassResumeData}
+                fullNameColor={hoveredColor}
+                fontFamily={hoveredFont}
+                sectionsVisibility={sectionsVisibility}
+                print={true}
+              />
+            ) : selectedTheme === "BlueAndWhite" ? (
+              <BlueAndWhite
+                resumeData={resumeData}
+                setResumeData={setPassResumeData}
+                fullNameColor={hoveredColor || "#000"}
+                fontFamily={hoveredFont}
+                sectionsVisibility={sectionsVisibility}
+                print={true}
+              />
+            ) : selectedTheme === "OceanTheme" ? (
+              <OceanTheme
+                resumeData={resumeData}
+                setResumeData={setPassResumeData}
+                fullNameColor={hoveredColor || "#000"}
+                fontFamily={hoveredFont}
+                sectionsVisibility={sectionsVisibility}
+                print={true}
+              />
+            ) : (
+              <WhiteAndBlue
+                resumeData={resumeData}
+                setResumeData={setPassResumeData}
+                fullNameColor={hoveredColor || "#000"}
+                fontFamily={hoveredFont}
+                sectionsVisibility={sectionsVisibility}
+                print={true}
+              />
+            )}
+          </div>
+        </>
+      )}
 
       {showPopup && <SubscriptionPopup onClose={() => setShowPopup(false)} />}
     </>
   );
+  
 };
 
 // Main ResumeNav component
-const ResumeNav = ({ 
-  resume, 
-  sectionsVisibility, 
-  hoveredColor, 
-  hoveredFont, 
-  selectedTheme, 
-  handleSave, 
-  isSaving 
+const ResumeNav = ({
+  resume,
+  sectionsVisibility,
+  hoveredColor,
+  hoveredFont,
+  selectedTheme,
+  handleSave,
+  isSaving,
+  passResumeData,
+  setPassResumeData,
 }) => {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
@@ -543,7 +636,10 @@ const ResumeNav = ({
   const shareButtonRef = useRef(null);
   const [userHasAccess, setUserHasAccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [notification, setNotification] = useState({ show: false, message: '' });
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+  });
   const { language } = useLanguage();
   const t = resumeTranslations[language] || resumeTranslations.en;
 
@@ -557,7 +653,7 @@ const ResumeNav = ({
   }, [searchParams, router, t.paymentSuccess]);
 
   const handleConfettiComplete = () => {
-    setNotification({ show: false, message: '' });
+    setNotification({ show: false, message: "" });
   };
 
   useEffect(() => {
@@ -568,10 +664,10 @@ const ResumeNav = ({
           if (response.data && response.data.data) {
             setUserHasAccess(response.data.data.hasAccess);
           } else {
-            console.error('Unexpected API response structure:', response.data);
+            console.error("Unexpected API response structure:", response.data);
           }
         } catch (error) {
-          console.error('Error fetching user access:', error);
+          console.error("Error fetching user access:", error);
         } finally {
           setIsLoading(false);
         }
@@ -601,11 +697,11 @@ const ResumeNav = ({
 
   const showUserNotification = (message) => {
     setNotification({ show: true, message });
-    setTimeout(() => setNotification({ show: false, message: '' }), 3000);
+    setTimeout(() => setNotification({ show: false, message: "" }), 3000);
   };
 
   const toggleShareDropdown = () => {
-    setShowShareDropdown(prevState => !prevState);
+    setShowShareDropdown((prevState) => !prevState);
   };
 
   const handleShare = async (platform) => {
@@ -615,18 +711,24 @@ const ResumeNav = ({
 
     switch (platform) {
       case "whatsapp":
-        url = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}%20${encodeURIComponent(shareUrl)}`;
+        url = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+          shareText
+        )}%20${encodeURIComponent(shareUrl)}`;
         break;
       case "facebook":
-        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          shareUrl
+        )}&quote=${encodeURIComponent(shareText)}`;
         break;
       case "twitter":
-        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          shareText
+        )}&url=${encodeURIComponent(shareUrl)}`;
         break;
       default:
         return;
     }
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   const handleCopyLink = () => {
@@ -649,10 +751,14 @@ const ResumeNav = ({
 
   return (
     <>
-      <Nav style={{ direction: 'ltr' }} notificationVisible={notification.show}>
+      <Nav
+        style={{ direction: "ltr" }}
+        notificationVisible={notification.show}
+        className="hidePrintClass"
+      >
         <Logo href="/">{t.logo}</Logo>
         <ButtonContainer>
-          <ResumeDownloadButton 
+          <ResumeDownloadButton
             userHasAccess={userHasAccess}
             resumeData={resume}
             sectionsVisibility={sectionsVisibility}
@@ -660,18 +766,24 @@ const ResumeNav = ({
             hoveredFont={hoveredFont}
             selectedTheme={selectedTheme}
             showNotification={showUserNotification}
+            passResumeData={passResumeData}
+            setPassResumeData={setPassResumeData}
           />
-        
+
           <SaveButton
             onClick={handleSaveWrapper}
-            style={{ backgroundColor: '#2ecc71' }}
+            style={{ backgroundColor: "#2ecc71" }}
             title={t.save}
           >
             <FaSave />
             <span>{t.save}</span>
           </SaveButton>
 
-          <ShareButton onClick={toggleShareDropdown} ref={shareButtonRef} title={t.share}>
+          <ShareButton
+            onClick={toggleShareDropdown}
+            ref={shareButtonRef}
+            title={t.share}
+          >
             <FaShare />
             <span>{t.share}</span>
           </ShareButton>
