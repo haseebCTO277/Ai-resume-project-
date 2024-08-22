@@ -560,6 +560,7 @@ const ResumeSideNav = ({ resume, setResume, theme, setTheme }) => {
 
   const handleGenerateContent = async () => {
     setIsGenerating(true);
+    setActiveModal(null);
     addNotification(t.toasts.generatingContent, 'info');
     try {
       console.log("Starting content generation");

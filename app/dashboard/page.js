@@ -1,6 +1,5 @@
 //app/dashboard/page.js
 
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -15,8 +14,7 @@ import { useSession } from "next-auth/react";
 import { useLanguage } from '../../contexts/LanguageContext';
 import { dashboardTranslations } from '../../locales/dashboardTranslations';
 import LanguageToggle from "@/components/LanguageToggle";
-
-
+import ResumePreviewPopup from "@/components/ResumePreviewPopup";
 
 const DashboardContainer = styled.main`
   min-height: 100vh;
@@ -146,6 +144,39 @@ const ButtonText = styled.span`
   text-align: center;
 `;
 
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const LoadingSpinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
+const LoadingText = styled.p`
+  color: white;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+`;
+
 const Dashboard = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -156,6 +187,10 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const { language } = useLanguage();
   const t = dashboardTranslations[language] || dashboardTranslations.en;
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [resumeColor, setResumeColor] = useState("#0000FF");
+  const [isGeneratingResume, setIsGeneratingResume] = useState(false);
+
 
   useEffect(() => {
     if (session) {
@@ -242,22 +277,29 @@ const Dashboard = () => {
     };
   };
 
-  const createResume = async () => {
+  const createResume = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleConfirmCreateResume = async (selectedColor, selectedTheme) => {
     try {
-      if (!user) {
+      if (!session?.user) {
         console.error("User data not available");
         return;
       }
 
-      console.log("Current user data:", user);
+      setIsPopupOpen(false);
+      setIsGeneratingResume(true);
+
+      console.log("Current user data:", session.user);
 
       const randomData = generateRandomData(language);
       const resumeData = {
-        fullName: user.name || t.defaultName || "John Doe",
-        email: user.email || t.defaultEmail || "johndoe@example.com",
-        resumeColor: "#0000FF",
-        fontFamily: "Courier New",
-        theme: "BlueAndWhite",
+        fullName: session.user.name || t.defaultName || "John Doe",
+        email: session.user.email || t.defaultEmail || "johndoe@example.com",
+        resumeColor: selectedColor,
+        fontFamily: selectedTheme === 'BlackAndWhite' ? "Arial" : "Courier New",
+        theme: selectedTheme,
         ...randomData
       };
 
@@ -265,19 +307,15 @@ const Dashboard = () => {
 
       const response = await axios.post("/api/resumes", resumeData, { withCredentials: true });
       const newResumeId = response.data.data._id;
+      
+      // Simulate a delay to show the loading state (remove this in production)
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      setIsGeneratingResume(false);
       router.push(`/dashboard/resume/${newResumeId}`);
     } catch (error) {
       console.error(t.errors?.createResume || "Error creating resume:", error);
-    }
-  };
-
-  const createCoverLetter = async () => {
-    try {
-      const response = await axios.post("/api/cover-letters", {}, { withCredentials: true });
-      const newCoverLetterId = response.data.data._id;
-      router.push(`/dashboard/cover-letter/${newCoverLetterId}`);
-    } catch (error) {
-      console.error("Error creating cover letter:", error);
+      setIsGeneratingResume(false);
     }
   };
 
@@ -334,7 +372,22 @@ const Dashboard = () => {
           <ResumeList resumes={resumes} coverLetters={coverLetters} onDelete={handleDelete} />
         </DocumentsContainer>
       </Content>
-    </DashboardContainer>
+      <ResumePreviewPopup 
+          isOpen={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+          onConfirm={handleConfirmCreateResume}
+          initialFullNameColor={resumeColor}
+          userName={session?.user?.name || "John Doe"}
+          />
+          {isGeneratingResume && (
+            <LoadingOverlay>
+              <div>
+                <LoadingSpinner />
+                <LoadingText>{t.generatingResume || 'Generating your resume...'}</LoadingText>
+              </div>
+            </LoadingOverlay>
+          )}
+        </DashboardContainer>
   );
 };
 

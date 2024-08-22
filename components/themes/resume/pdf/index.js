@@ -9,7 +9,7 @@ Font.register({
   family: "Times New Roman",
   fonts: [
     { src: "/fonts/times-new-roman.ttf" },
-    // { src: "/fonts/times-new-roman-italic.ttf", fontStyle: "italic" },
+    { src: "/fonts/times-new-roman-italic.ttf", fontStyle: "italic" },
     {
       src: "/fonts/times-new-roman-700.ttf",
       fontWeight: 700,
@@ -20,27 +20,22 @@ Font.register({
     },
   ],
 });
-
-
-
 Font.register({
   family: "Arial",
   fonts: [
     { src: "/fonts/ARIAL.ttf" },
-    // { src: "/fonts/ARIALBI.ttf", fontStyle: "italic" },
+    { src: "/fonts/ARIALBI.ttf", fontStyle: "italic" },
     {
       src: "/fonts/ARIALBD.ttf",
       fontWeight: 700,
     },
   ],
 });
-
-
-
 Font.register({
   family: "Verdana",
   fonts: [
     { src: "/fonts/Verdana.ttf" },
+    { src: "/fonts/Verdana-Italic.ttf", fontStyle: "italic" },
     { src: "/fonts/Verdana.ttf", fontWeight: 500 },
     {
       src: "/fonts/Verdana-Bold.ttf",
@@ -56,7 +51,7 @@ Font.register({
   family: "Courier New",
   fonts: [
     { src: "/fonts/Courier-New-Regular.ttf" },
-    // { src: "/fonts/Courier-New-Italic.ttf", fontStyle: "italic" },
+    { src: "/fonts/Courier-New-Italic.ttf", fontStyle: "italic" },
     {
       src: "/fonts/Courier-New-Bold.ttf",
       fontWeight: 700,
@@ -67,7 +62,7 @@ Font.register({
   family: "Georgia",
   fonts: [
     { src: "/fonts/georgia.ttf" },
-    // { src: "/fonts/georgiai.ttf", fontStyle: "italic" },
+    { src: "/fonts/georgiai.ttf", fontStyle: "italic" },
     {
       src: "/fonts/georgiab.ttf",
       fontWeight: 700,
@@ -78,14 +73,14 @@ Font.register({
   family: "Trebuchet MS",
   fonts: [
     { src: "/fonts/trebuc.ttf" },
-    // { src: "/fonts/Trebuchet-MS-Italic.ttf", fontStyle: "italic" },
+    { src: "/fonts/Trebuchet-MS-Italic.ttf", fontStyle: "italic" },
   ],
 });
 Font.register({
   family: "Comic Sans MS",
   fonts: [
     { src: "/fonts/ComicSansMS3.ttf" },
-    // { src: "/fonts/comici.ttf", fontStyle: "italic" },
+    { src: "/fonts/comici.ttf", fontStyle: "italic" },
     {
       src: "/fonts/comicz.ttf",
       fontWeight: 700,
@@ -100,7 +95,7 @@ Font.register({
       src: "/fonts/TAHOMAB0.ttf",
       fontWeight: 700,
     },
-    // { src: "/fonts/TAHOMA_0.ttf", fontStyle: "italic" },
+    { src: "/fonts/TAHOMA_0.ttf", fontStyle: "italic" },
   ],
 });
 
@@ -112,7 +107,7 @@ Font.register({
       src: "/fonts/AlexBrush-Regular.ttf",
       fontWeight: 700,
     },
-    // { src: "/fonts/AlexBrush-Regular.ttf", fontStyle: "italic" },
+    { src: "/fonts/AlexBrush-Regular.ttf", fontStyle: "italic" },
   ],
 });
 Font.register({
@@ -122,7 +117,7 @@ Font.register({
     { src: "/fonts/ArimaMadurai-500.ttf", fontWeight: 500 },
     { src: "/fonts/ArimaMadurai-600.ttf", fontWeight: 600 },
     { src: "/fonts/ArimaMadurai-700.ttf", fontWeight: 700 },
-    // { src: "/fonts/ArimaMadurai-400.ttf", fontStyle: "italic" },
+    { src: "/fonts/ArimaMadurai-400.ttf", fontStyle: "italic" },
   ],
 });
 Font.register({
@@ -133,29 +128,22 @@ Font.register({
       src: "/fonts/AntonSC-Regular.ttf",
       fontWeight: 700,
     },
-    // { src: "/fonts/AntonSC-Regular.ttf", fontStyle: "italic" },
-  ],
-});
-Font.register({
-  family: "Zain",
-  fonts: [
-    { src: "/fonts/Zain-Regular.ttf" },
-    { src: "/fonts/Zain-Regular.ttf", fontWeight: "normal" },
-    { src: "/fonts/Zain-Bold.ttf", fontWeight: "bold" },
-    { src: "/fonts/Zain-Black.ttf", fontWeight: "900" },
-    { src: "/fonts/Zain-ExtraBold.ttf", fontWeight: "800" },
-    { src: "/fonts/Zain-Light.ttf", fontWeight: "300" },
-    { src: "/fonts/Zain-ExtraLight.ttf", fontWeight: "200" },
+    { src: "/fonts/AntonSC-Regular.ttf", fontStyle: "italic" },
   ],
 });
 
 Font.register({
-  family: "Alkalami",
+  family: 'Zain',
   fonts: [
-    { src: "/fonts/Alkalami-Regular.ttf" },
-    { src: "/fonts/Alkalami-Regular.ttf", fontWeight: "400", },
+    { src: '/fonts/Zain-Regular.ttf', fontWeight: 'normal' },
+    { src: '/fonts/Zain-Bold.ttf', fontWeight: 'bold' },
+    { src: '/fonts/Zain-Black.ttf', fontWeight: '900' },
+    { src: '/fonts/Zain-ExtraBold.ttf', fontWeight: '800' },
+    { src: '/fonts/Zain-Light.ttf', fontWeight: '300' },
+    { src: '/fonts/Zain-ExtraLight.ttf', fontWeight: '200' },
   ],
 });
+
 
 function ThemePdf({
   resumeData,
@@ -199,7 +187,6 @@ function ThemePdf({
       fontWeight: "400",
       whiteSpace: "normal",
       wordBreak: "break-word",
-      fontFamily: `${fontFamily}`,
     },
     blueAndWhiteTitle: {
       borderBottom: "2px solid #000",
@@ -250,10 +237,6 @@ function ThemePdf({
       minHeight: "100vh",
       height: "auto",
     },
-    rtl: {
-      direction: "rtl",
-      textAlign: "right",
-    },
   });
 
   return (
@@ -293,7 +276,7 @@ function ThemePdf({
             sectionsVisibility={sectionsVisibility}
             fullNameColor={fullNameColor}
             styles={styles}
-            language={language}
+            language={language} 
           />
         )}
       </Page>

@@ -1,4 +1,4 @@
-// locales/resumeTranslations.js
+// locales/resumeTranslations.js.
 
 export const resumeTranslations = {
     en: {

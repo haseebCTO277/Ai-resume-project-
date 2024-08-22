@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
- 
+
 const Confetti = ({ onComplete }) => {
   const canvasRef = useRef(null);
 
@@ -8,9 +8,9 @@ const Confetti = ({ onComplete }) => {
     const canvas = canvasRef.current;
     const myConfetti = confetti.create(canvas, {
       resize: true,
-      useWorker: true, 
+      useWorker: true,
     });
- 
+
     const duration = 4 * 1000;
     const end = Date.now() + duration;
 
